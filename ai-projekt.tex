@@ -1,9 +1,21 @@
-\documentclass[a4paper, 12pt]{scrreprt}
+\documentclass[
+  fontsize=11pt,
+  draft=true,
+  titlepage=true,
+  abstract=true,
+  headsepline=true
+]{scrreprt}
 \usepackage{style}
+\pagestyle{headings}
 \begin{document}
 \input{tex/title}
 \maketitle
+\input{tex/abstract}
 \tableofcontents
+\input{tex/motivation}
+\input{tex/beschreibung_anwendung}
+\input{tex/design}
+\input{tex/purescript}
 \end{document}
 
 %%% Local Variables:
