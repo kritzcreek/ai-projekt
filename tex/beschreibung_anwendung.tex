@@ -1,6 +1,13 @@
 \chapter{Die Anwendung}
-\section{Zeitplan Ansicht}
+\label{cha:die-anwendung}
+Die Webanwendung FROST unterstützt bei der Verwaltung, Planung und Durchführung
+von Open Spaces. Ein Open Space erhält seine eigene Instanz. Es können mehrere
+Instanzen/Open Spaces parallel verwendet werden. Jede Instanz erhält ihr
+eigenes Board und kann auf der Zeitplan Ansicht~\ref{sec:zeitplan-ansicht}
+verwaltet werden.
 
+\section{Zeitplan Ansicht}
+\label{sec:zeitplan-ansicht}
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{fig/timetable.png}
@@ -25,10 +32,10 @@ durchgeführt. Hierfür werden drei verschiedene Arten von Aktionen unterstützt
 \subsubsection*{Anlegen}
 In der Zeitplan Ansicht lassen sich die Räume und Zeitslots der Veranstaltung
 anlegen und anpassen. Weiterhin werden in dieser Ansicht neue Themen angelegt
-und dem Board hinzugefügt. Das Anlegen der Räume, Zeitslots und Themen wird in
-Popups mit den nötigen Angaben vorgenommen, die sich durch Klicks auf die
-entsprechenden Knöpfe in der Fußzeile aufrufen lassen. Für neue Themen stehen
-verschiedene Typen zur Verfügung:
+und dem Themenspeicher hinzugefügt. Das Anlegen der Räume, Zeitslots und Themen
+wird in Popups mit den nötigen Angaben vorgenommen, die sich durch Klicks auf
+die entsprechenden Knöpfe in der Fußzeile aufrufen lassen. Für neue Themen
+stehen verschiedene Typen zur Verfügung:
 \begin{itemize}
 \item Diskussion -- Gelb
 \item Präsentation -- Blau
@@ -39,19 +46,30 @@ verschiedene Typen zur Verfügung:
 Neu angelegte Themen werden zunächst im Themenspeicher abgelegt und können dann
 per Drag `n Drop auf das Board gezogen werden. Genauso können Themen auf dem
 Board in andere Slots gezogen oder vom Board entfernt werden. Verschiebt man ein
-Thema auf ein Feld das bereits belegt war, wird das vorige Thema in den
-Themenspeicher gelegt und neue Thema dem Feld zugewiesen.
+Thema auf ein Feld das bereits belegt war, wird das vorherige Thema in den
+Themenspeicher gelegt und das neue Thema dem Feld zugewiesen.
 
 \subsubsection*{Entfernen}
 Möchte man ein Thema vollständig löschen, erscheint, sobald man das Thema
 angehoben hat, in der Fußzeile eine breiter Löschstreifen der durch ein
 Mülltonnen Icon gekennzeichnet ist. Bewegt man ein Thema über diesen Streifen
-leuchtet dieser rot auf und lässt man das Thema nun los wird es gelöscht.
+leuchtet dieser rot auf, und lässt man das Thema dann los, wird es gelöscht.
 
 Weiterhin können auch einmal erstellte Räume und Zeitslots wieder entfernt
-werden. Bewegt man die Maus über die entsprechende Tabellenzeile im Tabellenkopf
-oder in der ersten Tabellenspalte, erscheint ein X-Icon bei dessen Klick der
+werden. Bewegt man die Maus über die entsprechende Felder im Tabellenkopf oder
+in der ersten Tabellenspalte, erscheint ein X-Icon bei dessen Klick der
 entsprechende Raum oder Zeitslot vom Board entfernt wird.
+
+\section{Administrator Ansicht}
+
+Auf der Administrator Ansicht werden die Instanzen verwaltet.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{fig/admin.png}
+  \caption{Administration}
+\end{figure}
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../ai-projekt"
