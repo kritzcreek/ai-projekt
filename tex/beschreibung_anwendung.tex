@@ -61,14 +61,31 @@ in der ersten Tabellenspalte, erscheint ein X-Icon bei dessen Klick der
 entsprechende Raum oder Zeitslot vom Board entfernt wird.
 
 \section{Administrator Ansicht}
-
-Auf der Administrator Ansicht werden die Instanzen verwaltet.
-
+\label{sec:admin-ansicht}
+In der Administrator Ansicht werden die verschiedenen
+Instanzen verwaltet.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{fig/admin.png}
   \caption{Administration}
 \end{figure}
+
+\subsection*{Instanzen}
+\label{sec:instanzen}
+ Mit einem Klick auf \emph{Create new Instance} kann eine
+neue Instanz angelegt werden. Diese wird mit einer UUID verknüpft und kann
+anschließend über diese referenziert werden. Mit einem Klick auf eine UUID in
+der Instanzliste kann direkt auf das Board dieser Instanz gewechselt werden.
+
+\subsection*{Snapshots}
+\label{sec:snapshots}
+Unter \emph{Snapshots speichern} kann eine Instanz ausgewählt und ihr
+derzeitiger Zustand in einem Snapshot persistiert werden.
+Mittels \emph{Snapshots laden} kann dieser sowie früher gespeicherte Snapshots
+in eine beliebige Instanz geladen werden. Der Zustand dieser Instanz wird dann
+durch den Snapshot ersetzt.
+
+\section{Synchronisierung}
 
 %%% Local Variables:
 %%% mode: latex

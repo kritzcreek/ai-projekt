@@ -1,5 +1,33 @@
 \chapter{Design}
+In diesem Kapitel werde ich auf Design Entscheidungen sowohl im Bezug auf die
+Architektur der Anwendung als auch der Nutzeroberfläche eingehen.
 \section{Architektur}
+\label{sec:architektur}
+Als Webanwendung besteht FROST aus einem Backend und einem Frontend. Das Backend
+wird dabei auf einem Server ausgeführt der über eine Netzwerkverbindung für die
+Clients erreichbar sein muss. Weiterhin wird auf dem Server eine Datenbank
+betrieben die für das Backend zur Verfügung steht. Das Frontend wird in den
+Browsern der Clients ausgeführt.
+\subsection*{Backend}
+\label{sec:backend}
+Das Backend von FROST wurde in Haskell entwickelt. Haskell ist eine funktionale
+Programmiersprache auf die später noch eingegangen wird (TODO: link haskell).
+Als Datenbank wird derzeit eine Postgres Datenbank verwendet wobei diese bei
+Bedarf leicht durch eine angemessenere Datenbank ausgetauscht werden kann. Das
+Backend stellt drei primäre Endpunkte zur Verfügung.
+
+\begin{enumerate}
+\item \textbf{Administration:} Bietet Aktionen für die Admin Ansicht an
+\item \textbf{Static:} Stellt die statischen Assets des Frontends(HTML, CSS, JS)
+  zur Verfügung
+\item \textbf{Socket:} Bietet Clients Websocketverbindungen an über die
+  Änderungen an den Boards vorgenommen werden können
+\end{enumerate}
+
+\subsection*{Frontend}
+\label{sec:frontend}
+Das Frontend orientiert sich am Pattern des \textit{Unidirectional Dataflows}.
+
 \section{User Interface \& User Experience}
 %%% Local Variables:
 %%% mode: latex
