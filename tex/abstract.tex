@@ -1,7 +1,31 @@
 \begin{abstract}
-  Functional Programming kicks ass.
+Funktionale Programmierung gewinnt aufgrund ihrer Vorteile im Umfeld von
+Parallelisierung und Skalierung immer mehr an Bedeutung. Diese Vorteile zeigen
+sich primär in Backend-Systemen, wo große Cluster von Servern, Daten verarbeiten.
 
-  You can be sure that this is a fact.
+Besonders bekannt ist in diesem Umfeld Haskell, eine lazy evaluierte
+Programmiersprache mit einem mächtigen statischem Typsystem. Die
+Garantien, die ein solches Typsystem mit sich bringt, ermöglichen es auch große
+Codebases langfristig zu warten und zu erweitern. Auch der Compiler macht sich
+diese Garantien zu Nutze und kann großflächig optimieren.
+
+Doch auch am Frontend gilt es mittlerweile komplexe Systeme zu entwickeln.
+Besonders im Bereich der Webentwicklung werden die Nutzeroberflächen schöner,
+schneller und vor allem \emph{komplexer}. Leider führen Browser nur JavaScript,
+eine Scriptsprache mit vielen Schwächen und Kuriositäten aus, die den
+Herausforderungen, die interaktive Nutzeroberflächen mit sich bringen, nicht
+gewachsen ist.
+
+An dieser Stelle setzt PureScript an, eine rein funktionale Programmiersprache
+die zu JavaScript kompiliert wird. Mit einem ausdrucksstarken Typsystem und den
+nötigen Werkzeugen für Abstraktionen wie Monaden und Higher-Order-Polymorphismen
+erlaubt es die Möglichkeiten funktionaler Programmierung für das Bändigen der
+Komplexität am Frontend zu nutzen.
+
+Im Zuge meiner Ausbildung habe ich ein Projekt mit Haskell und PureScript
+umgesetzt und werde in dieser Arbeit von meinen Erfahrungen und Erkenntnissen,
+sowie der entstandenen Applikation FROST, berichten.
+
 \end{abstract}
 
 %%% Local Variables:
