@@ -10,13 +10,45 @@ PureScript wird auf der Webseite des Projektes mit folgenden Worten beschrieben:
   Javascript.\footnote{\url{www.purescript.org}}
 \end{quote}
 Ich würde dieser Beschreibung noch hinzufügen, dass es sich um eine rein
-funktionale Programmiersprache handelt. Im Gegensatz zu anderen
-Programmiersprachen die zu JavaScript kompiliert werden, ist PureScript nicht
-nur syntaktisch von JavaScript zu unterscheiden sondern vor allem auch
-semantisch.
+funktionale Programmiersprache handelt und damit einige der guten Eigenschaften
+von Haskell übernimmt.
+PureScript wirbt mit besonders guter JavaScript Interoperabilität durch das
+intuitive Foreign Function Interface.
+Beispielsweise lässt sich die JavaScript Funktion \texttt{encodeURI} wie folgt in
+PureScript einbinden.
+
+\begin{lstlisting}
+foreign import encodeURI :: String $\rightarrow$ String
+\end{lstlisting}
+
 
 \section{Evaluierung}
-what a cool language omegad
+Im Gegensatz zu Haskell wird PureScript jedoch strict
+evaluiert und übernimmt damit die Evaluierungsstrategie von JavaScript. Dies
+erlaubt es dem PureScript Compiler lesbares JavaScript zu erzeugen, dass sich
+leicht mit dem ursprünglichen Quellcode in Verbingung bringen lässt. Dies macht
+sowohl Debugging als auch das Untersuchen der Laufzeit von Algorithmen leichter.
+
+Aber die strikte Evaluierungsstrategie macht PureScript zu einer anderen
+Programmiersprache und darauf muss man achten wenn man in PureScript
+programmiert. Strictness zwingt einen über die Laufzeitrepräsentation der
+verwendeten Datenstrukturen nachzudenken, da beispielsweise unendliche/zyklische
+Datenstrukturen ``vollständig'' evaluiert werden und damit den Browser zum
+Stillstand bringen.
+
+Die mit undendlichen Datenstrukturen Hand in Hand gehende Rekursion ist in einem
+strict Umfeld gefährlich, da sie schnell zu einem Stackoverflow führen kann.
+Auch besonders High-Level Konstrukte wie Monadentransformer sind in PureScript
+mit Vorsicht zu genießen, da sie in der Regel auf tief geschachtelten Closures
+beruhen und den Stack damit genau so belasten wie Rekursion.
+
+Derartige Probleme habe ich in FROST gelöst indem ich für die Datenstrukturen
+und die besonders aufwendigen Algorithmen (Rendering) JavaScript Bibliotheken
+verwendet habe und PureScript eher die Steuerung als die Berechnungen übernimmt.
+Dieses Vorgehen ist typisch für die Verwendung von High-Level-Languages. Die
+mächtigen Abstraktionen werden genutzt um die Low-Level Details zu steuern um
+damit die Applikationslogik und den mechanischen Akt der Berechnung voneinander
+zu trennen.
 
 %%% Local Variables:
 %%% mode: latex
