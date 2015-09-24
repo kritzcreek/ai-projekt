@@ -1,34 +1,35 @@
-\chapter{Design}
-In diesem Kapitel werde ich auf Design Entscheidungen sowohl im Bezug auf die
-Architektur der Anwendung als auch der Nutzeroberfläche eingehen.
-\section{Architektur}
-\label{sec:architektur}
-Als Webanwendung besteht FROST aus einem Backend und einem Frontend. Das Backend
-wird dabei auf einem Server ausgeführt der über eine Netzwerkverbindung für die
-Clients erreichbar sein muss. Weiterhin wird auf dem Server eine Datenbank
-betrieben die für das Backend zur Verfügung steht. Das Frontend wird in den
-Browsern der Clients ausgeführt.
-\subsection*{Backend}
-\label{sec:backend}
-Das Backend von FROST wurde in Haskell entwickelt. Haskell ist eine funktionale
-Programmiersprache auf die später noch eingegangen wird (TODO: link haskell).
-Als Datenbank wird derzeit eine Postgres Datenbank verwendet wobei diese bei
-Bedarf leicht durch eine angemessenere Datenbank ausgetauscht werden kann. Das
-Backend stellt drei primäre Endpunkte zur Verfügung.
+\chapter{User Interface \& User Experience}
+In diesem Kapitel werde ich auf Design Entscheidungen im Bezug auf das User
+Interface und die Interaktionen des Nutzers mit der Anwendung eingehen.\\
+Hierbei habe ich einige Entscheidungen getroffen, die ich im folgendem
+aufgreifen und einzeln begründen werde.
 
-\begin{enumerate}
-\item \textbf{Administration:} Bietet Aktionen für die Admin Ansicht an
-\item \textbf{Static:} Stellt die statischen Assets des Frontends(HTML, CSS, JS)
-  zur Verfügung
-\item \textbf{Socket:} Bietet Clients Websocketverbindungen an über die
-  Änderungen an den Boards vorgenommen werden können
-\end{enumerate}
+\section{Keine Authentifizierung/Authorisierung}
+Das Ziel ist/war es die Anwendung so spontan und offen wie möglich zu gestalten.
+Ein Loginvorgang würde diesem Prinzip im Weg stehen, wobei eine Authorisierung
+für den Administrationsbereich eventuell nötig ist wenn die Größe der
+Teilnehmerzahl über einen Punkt wächst, ab dem sich einige User zu anonym fühlen
+und Schabernack treiben wollen.
+Authentifizierung im Sinne einer Wiedererkennung desselben Users könnte
+Usability Vorteile bringen und ist langfristig geplant. Das wichtigste Kriterium
+für das gewählte Verfahren ist aber auf jeden Fall die Offenheit und Spontanheit
+der Anwendung.
 
-\subsection*{Frontend}
-\label{sec:frontend}
-Das Frontend orientiert sich am Pattern des \textit{Unidirectional Dataflows}.
+\section{Drag n' Drop}
+Ich habe mich für Drag n' Drop als primäres Interaktionsverfahren in FROST
+entschieden. Drag n' Drop ist ein intuitives Verfahren um mit den in FROST
+vorhandenen Elementen zu interagieren. Das Konzept eines Stundenplans, auf dem
+man Themenblöcke hin- und herschieben kann, ist leicht auf die Wirklichkeit
+abzubilden. Weiterhin ist Drag n' Drop ein besonders geeignetes Verfahren auf
+Touchgeräten, bei dem der Mensch ``physikalisch'' mit den Benutzerelementen
+interagiert.
 
-\section{User Interface \& User Experience}
+\section{Visuelles Design}
+FROST bemüht sich keinen visuellen Overhead für den Nutzer zu erzeugen. Das Ziel
+ist eine minimale, ansprechende Nutzeroberfläche, bei der man nichts entfernen
+kann ohne wesentliche Funktionalität einzuschränken. So soll sich der Nutzer
+möglichst schnell zurecht finden können.
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../ai-projekt"

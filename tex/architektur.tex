@@ -1,0 +1,93 @@
+\chapter{Architektur}
+\label{sec:architektur}
+In diesem Kapitel werde ich auf Design Entscheidungen im Bezug auf die
+Architektur der Anwendung eingehen.
+
+Als Webanwendung besteht FROST aus einem Backend und einem Frontend. Das Backend
+wird dabei auf einem Server ausgeführt der über eine Netzwerkverbindung für die
+Clients erreichbar sein muss. Weiterhin wird auf dem Server eine Datenbank
+betrieben die für das Backend zur Verfügung steht. Das Frontend wird in den
+Browsern der Clients ausgeführt.
+
+\section{Haskell Backend}
+\label{sec:backend}
+Das Backend von FROST wurde in Haskell entwickelt. Haskell ist eine funktionale
+Programmiersprache auf die später noch eingegangen wird (TODO: link haskell).
+Als Datenbank wird derzeit eine Postgres Datenbank verwendet wobei diese bei
+Bedarf leicht durch eine andere Datenbank ausgetauscht werden kann. Das Backend
+stellt drei primäre Endpunkte zur Verfügung.
+
+\begin{enumerate}
+\item \textbf{Administration:} Bietet Aktionen für die Admin Ansicht an
+\item \textbf{Static:} Stellt die statischen Assets des Frontends (HTML, CSS, JS)
+  zur Verfügung
+\item \textbf{Socket:} Bietet Clients Websocketverbindungen an über die
+  Änderungen an den Boards vorgenommen werden können
+\end{enumerate}
+
+Die Entscheidung Haskell im Backend zu nutzen stützt sich auf die folgenden
+Qualitäten und Features von Haskell.
+
+\subsection*{Typsicherheit}
+Haskell's Typsystem ist ähnlich fortgeschritten wie das von PureScript und
+erlaubt das Enkodieren von wesentlichen Invarianten in der Typsignatur von
+Funktionen. Bei der Entwicklung von FROST konnte ich mir dies zu Nutze machen um
+strikt die ``reinen'' Funktionen von Funktionen mit Seiteneffekt zu trennen. Rein
+bedeutet in diesem Zusammenhang, dass die Funktion ausschließlich Input erhält,
+diesen in Output transformiert, ohne die Welt um sich herum zu beeinflussen.
+
+\subsection*{WebSockets}
+FROST benötigt WebSockets am Backend, um in Echtzeit Updates an die Clients
+verteilen zu können. Das verwendete Haskell Framework ``Yesod'' (TODO: Insert link)
+erlaubt es auf einfache Art und Weise WebSockets und normale HTTP Endpunkte zu
+mischen. 
+
+\subsection*{Concurrency}
+WebSockets müssen im Gegensatz zu klassischen HTTP Requests offen
+gehalten werden und erfordern, dass der Server einen Listener für jeden
+WebSocket abstellt. 
+Dies ist eines der wichtigsten Kriterien für Haskell. Der Multithreading Support
+von Haskell ist anderen Sprachen weit voraus. Werkzeuge wie Software
+Transactional Memory (TODO: add Link) werden in FROST ausgiebig genutzt und
+erlauben es dem Server viele Clients gleichzeitig und trotzdem performant zu
+bedienen. Durch die Tools die Haskell hier zur Verfügung stellt kann
+FROST auf einem kleinen Server (Single Core, 512MB Ram) laufen und dennoch über
+100 Clients gleichzeitig bedienen.
+
+\subsection*{Hohe Ähnlichkeit zu PureScript}
+Haskell's Syntax ist der von PureScript sehr ähnlich. Auch semantisch liegen
+sich die Sprachen sehr nahe, was es erleichtert zwischen Frontend und Backend
+hin und her zu wechseln ohne viel Zeit für den Kontextwechsel zu verlieren.
+
+\subsection*{Guter Support für ``State Machine'' artige Anwendungen}
+
+\section{Event Sourcing}
+Event Sourcing ist eine Art den Zustand in einer Applikation zu verwalten und
+speichern, bei der man nicht den Zustand selbst speichert, sondern die
+Ereignisse die zu diesem Zustand geführt haben. Dieses Verfahren habe ich für
+FROST aus den folgenden Gründen gewählt.
+
+\subsection*{Events statt Zustand versenden}
+FROST kommuniziert nur aufgetretene Events zwischen Clients und Server. Der
+aktuelle Zustand lässt sich herstellen, indem man die bisher aufgetretenen
+Events sequentiell abspielt. Von da an werden nur noch neue Events verteilt.
+Dies unterstüzt die verteilte Natur von FROST, da bei einer Änderung nicht der
+neue Zustand an alle Teilnehmer verschickt werden muss, sondern das größenmäßig
+viel kleinere Event.
+
+\subsection*{Möglichkeiten für die Zukunft}
+Eventsourcing eröffnet interessante Möglichkeiten. Beispielsweise lässt sich ein
+Fehler in der Vergangenheit korrigieren indem man das damalige Event verändert
+und die Events neu abspielt. Auch unter einem Reporting Gesichtspunkt ist
+Eventsourcing interessant, da die Vergangenheit vollständig aufbewahrt wird und
+für Analysen zur Verfügung steht.
+
+
+\section{PureScript \& JavaScript Frontend}
+\label{sec:frontend}
+Das Frontend orientiert sich am Pattern des \textit{Unidirectional Dataflows}.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../ai-projekt"
+%%% End:
