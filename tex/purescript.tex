@@ -1,6 +1,6 @@
 \chapter{PureScript}
-Das Frontend von FROST wurde zum Großteil in PureScript entwickelt.\\
-Was PureScript als Programmiersprache ausmacht und welche Stärken und Schwächen
+Das Frontend von FROST wurde zum Großteil in PureScript entwickelt. Was
+Pure\-Script als Programmiersprache ausmacht und welche Stärken und Schwächen
 PureScript während des Projektes gezeigt hat werde ich in diesem Kapitel
 erläutern.
 \section{Einführung}
@@ -11,23 +11,122 @@ PureScript wird auf der Webseite des Projektes mit folgenden Worten beschrieben:
 \end{quote}
 Ich würde dieser Beschreibung noch hinzufügen, dass es sich um eine rein
 funktionale Programmiersprache handelt und damit einige der guten Eigenschaften
-von Haskell übernimmt.
-PureScript wirbt mit besonders guter JavaScript Interoperabilität durch das
-intuitive Foreign Function Interface.
-Beispielsweise lässt sich die JavaScript Funktion \texttt{encodeURI} wie folgt in
-PureScript einbinden.
+von Haskell übernimmt. Im folgenden werde ich auf einige Eigenschaften und
+Features von PureScript eingehen.
+% PureScript wirbt mit besonders guter JavaScript Interoperabilität durch das
+% intuitive Foreign Function Interface.
+% Beispielsweise lässt sich die JavaScript Funktion \texttt{encodeURI} wie folgt in
+% PureScript einbinden.
 
+% \begin{lstlisting}
+% foreign import encodeURI :: String -> String
+% \end{lstlisting}
+
+\section{Eigenschaften \& Features}
+
+\subsection*{Unveränderlichkeit}
+Variablen sind in PureScript unveränderlich und das folgende Programm wird vom
+PureScript Compiler abgewiesen:
 \begin{lstlisting}
-foreign import encodeURI :: String $\rightarrow$ String
+x = 3
+x = 4
+\end{lstlisting}
+Dies unterscheidet PureScript deutlich von JavaScript, wo dieses Programm gar
+kein Problem ist:
+\begin{lstlisting}
+var x = 3
+x = 4
+console.log('x ist' + x)
+// => x ist 4
 \end{lstlisting}
 
+Strikte Unveränderlichkeit von Variablen wie in PureScript hat einige Vor- wie
+auch Nachteile die ich im folgenden nennen und anschließend auf FROST beziehen
+werde.
 
-\section{Evaluierung}
-Im Gegensatz zu Haskell wird PureScript jedoch strict
-evaluiert und übernimmt damit die Evaluierungsstrategie von JavaScript. Dies
-erlaubt es dem PureScript Compiler lesbares JavaScript zu erzeugen, dass sich
-leicht mit dem ursprünglichen Quellcode in Verbingung bringen lässt. Dies macht
-sowohl Debugging als auch das Untersuchen der Laufzeit von Algorithmen leichter.
+\subsubsection*{Vorteile von Unveränderlichkeit}
+
+\begin{itemize}
+\item Geringere Komplexität
+
+  Einer der wichtigsten Vorteile von unveränderlichen Variablen ist, dass sie es
+  dem Programmierer erlauben über ein Programm nachzudenken ohne es ausführen zu
+  müssen. Unveränderliche Variablen verringern die Komplexität in Applikationen,
+  indem die Menge der sich bewegenden Teile verringert wird. Außerdem verringern
+  unveränderliche Variablen die Abhängigkeiten unter den verschiedenen Modulen
+  eines Programmes, da ein einzelnes Module keinen Einfluss auf den Zustand
+  eines anderen haben kann.
+
+\item Optimierungen 
+
+  Unveränderliche Variablen erlauben Optimierungen in Hinsicht auf Performance.
+  Beispielsweise kann man eine unveränderliche Variable beliebig lang in einem
+  Cache speichern, da sie nie ungültig werden wird. Das verwendete Framework für
+  das Viewlayer macht sich zu Nutze, dass im Umfeld von unveränderlichen
+  Variablen Referenzgleichheit auf Wertgleichheit schließen lässt. Bei einer
+  baumartigen Struktur wie der DOM (Document Object Model) lassen sich damit
+  ganze Teilbäume als unverändert bestimmen, indem man ihre Elternknoten auf
+  Referenzgleichheit überprüft.
+
+\end{itemize}
+
+\subsubsection*{Nachteile von Unveränderlichkeit}
+
+\begin{itemize}
+\item Höherer Speicherbedarf
+
+  Da Variablen unveränderlich sind, können ihre Referenzen nicht wieder
+  verwendet werden und müssen daher Garbage Collected werden. Dies kann die
+  Laufzeit von Programmen verschlechtern und zu Space Leaks führen. Ein Space
+  Leak ähnelt dabei einem Memory Leak. Ein Memory Leak tritt auf, wenn ein
+  Programm Resourcen allokiert, diese jedoch nicht mehr freigibt und damit immer
+  mehr Resourcen ``verschlingt''. Im Gegensatz zum Memory Leak werden allokierte
+  Resourcen beim Space Leak zwar wieder freigegeben, jedoch werden sie zu lange
+  im Speicher festgehalten und belasten damit Heap und Stack ähnlich wie Memory
+  Leaks.
+  
+\item Rekursion und Stackoverflows
+
+  Im Umfeld von unveränderlichen Variablen ist Rekursion die wichtigste
+  Kontrollstruktur. Zu tiefe Rekursion kann jedoch den Stack belasten und zu
+  Stackoverflows führen. Es gibt Methoden wie Tail Call Elimination oder
+  Trampolining um mit diesen Problemen umzugehen. Diese Methoden erfordern
+  jedoch zusätzlichen Aufwand, welchen man mit veränderlichen Variablen nicht
+  hätte.
+\end{itemize}
+\subsubsection*{Fazit}
+Das Programmieren mit unveränderlichen Variablen erfordert ein Umdenken des
+Programmierers in manchen Bereichen. Die Vorteile überwiegen die Nachteile
+jedoch eindeutig, und dies konnte ich auch bei der Entwicklung von FROST immer
+wieder feststellen. Der Code ist lesbarer und verständlicher und Debugging ist
+nur in wenigen Fällen notwendig. Probleme mit dem erhöhten Speicherbedarf sind
+in FROST nicht aufgetretenen, da ich von vorneherein darauf geachtet habe zu
+tiefe Rekursionen durch folds oder Tail Call Aufrufe zu vermeiden.
+
+\subsection*{Effekt System}
+
+In PureScript muss eine Funktion die einen Seiteneffekt hat dies in ihrem Typ
+widerspiegeln. Dies wird durch den Typ Eff (Extensible Effects) abgebildet.
+Beispielsweise hat die Funktion \texttt{log}, die ihr Argument auf die
+JavaScript Konsole ausgibt, den Typ \texttt{log :: String -> Eff (console ::
+  CONSOLE) Unit}. Dies gibt an, dass die Funktion außer ihrem Rückgabewert
+\texttt{Unit} den \texttt{CONSOLE} Effekt verursacht.
+
+\subsection*{Typsystem}
+Im Gegensatz zu JavaScript hat PureScript ein statisches Typsystem das bereits
+zur Compilezeit viele Fehler und Crashes verhindern kann. PureScript's Typsystem
+ist deutlich mächtiger als beispielsweise das von Java und kann dadurch auch als
+Design Werkzeug eingesetzt werden.
+
+Weitere Vorteile von PureScript's Typsystem sind, dass die Typen einer
+Bibliothek als Dokumentation wirken und weniger Unit Tests notwendig sind um
+sich vor Regressionen bei Refactorings zu schützen.
+\subsection*{Evaluierungstrategie}
+Im Gegensatz zu Haskell wird PureScript strikt evaluiert und übernimmt damit die
+Evaluierungsstrategie von JavaScript. Dies erlaubt es dem PureScript Compiler
+lesbares JavaScript zu erzeugen, dass sich leicht mit dem ursprünglichen
+Quellcode in Verbingung bringen lässt. Dies macht sowohl Debugging als auch das
+Untersuchen der Laufzeit von Algorithmen leichter.
 
 Aber die strikte Evaluierungsstrategie macht PureScript zu einer anderen
 Programmiersprache und darauf muss man achten wenn man in PureScript
