@@ -86,6 +86,46 @@ für Analysen zur Verfügung steht.
 \section{PureScript \& JavaScript Frontend}
 \label{sec:frontend}
 Das Frontend orientiert sich am Pattern des \textit{Unidirectional Dataflows}.
+Bei diesem Pattern beschreibt man das Viewlayer als eine reine Funktion, welche
+den Applikationszustand auf eine virtuelle grafische Form (Virtual DOM)
+abbildet. Diese Virtual DOM wird dann von einem Framework mit der aktuellen
+tatsächlichen Ansicht verglichen um die Differenz zwischen den beiden zu
+bestimmen. Mithilfe der Differenz wird dann eine minimale Menge von Änderungen
+bestimmt, die nötig sind um den aktuellen Zustand in den neuen, noch
+virtuellen, zu überführen.
+
+Der aktuelle Applikationszustand wird in einer Statemachine festgehalten. Diese
+akzeptiert eine Menge von Aktionen oder Events, und verwendet eine Funktion der
+Form \texttt{Aktion -> Applikationszustand -> Applikationszustand} um den
+Applikationszustand fortzuschreiten. In FROST sieht diese Methode wie folgt aus:
+\begin{lstlisting}
+evalAction :: Action -> AppState -> AppState
+evalAction (AddTopic t) as      = addTopic t as
+evalAction (DeleteTopic t) as   = deleteTopic t as
+evalAction (AddRoom r) as       = addRoom r as
+evalAction (DeleteRoom r) as    = deleteRoom r as
+evalAction (AddBlock b) as      = addBlock b as
+evalAction (DeleteBlock b) as   = deleteBlock b as
+evalAction (AssignTopic s t) as = addTimeslot s t as
+evalAction (UnassignTopic t) as =
+  let topicslotFilter = (/=) t <<< snd
+  in as { timeslots = filterMap topicslotFilter as.timeslots }
+evalAction (ReplayActions actions) _ = generateState actions
+evalAction (ShowError e) as     = as
+evalAction NOP as               = as
+\end{lstlisting}
+
+Auf der linken Seite des Gleichheitszeichens wird Pattern Matchen gegen die
+Actions eingesetzt. Auf diese Weise werden die notwendigen Informationen um den
+Zustand fortzuschreiten aus den Actions extrahiert. Beispielsweise enthält die
+AddTopic Action ein Topic, dass anschließend von der Methode addTopic in den
+Applikationszustand eingefügt wird.
+
+Das Viewlayer bekommt nun die Möglichkeit Actions zu generieren und an die
+Statemachine weiterzugeben. Diese generiert einen neuen Applikationszustand und
+mithilfe dieses Zustandes wird eine neue View generiert. Weil die View nur durch
+Actions auf den Applikationszustand einwirken kann ist der Datenfluss in der
+Applikation zyklisch aufgebaut und fließt immer nur in eine Richtung.
 
 %%% Local Variables:
 %%% mode: latex
