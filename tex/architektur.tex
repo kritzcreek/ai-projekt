@@ -1,5 +1,5 @@
 \chapter{Architektur}
-\label{sec:architektur}
+\label{cha:architektur}
 In diesem Kapitel werde ich auf Design Entscheidungen im Bezug auf die
 Architektur der Anwendung eingehen.
 
@@ -11,11 +11,11 @@ Browsern der Clients ausgeführt.
 
 \section{Haskell Backend}
 \label{sec:backend}
-Das Backend von FROST wurde in Haskell entwickelt. Haskell ist eine funktionale
-Programmiersprache auf die später noch eingegangen wird (TODO: link haskell).
-Als Datenbank wird derzeit eine Postgres Datenbank verwendet wobei diese bei
-Bedarf leicht durch eine andere Datenbank ausgetauscht werden kann. Das Backend
-stellt drei primäre Endpunkte zur Verfügung.
+Das Backend von FROST wurde in Haskell\footnote{\url{https://www.haskell.org/}}
+entwickelt. Haskell ist eine funktionale Programmiersprache auf die später noch
+eingegangen wird. Als Datenbank wird derzeit eine Postgres Datenbank verwendet
+wobei diese bei Bedarf leicht durch eine andere Datenbank ausgetauscht werden
+kann. Das Backend stellt drei primäre Endpunkte zur Verfügung.
 
 \begin{enumerate}
 \item \textbf{Administration:} Bietet Aktionen für die Admin Ansicht an
@@ -38,21 +38,21 @@ diesen in Output transformiert, ohne die Welt um sich herum zu beeinflussen.
 
 \subsection*{WebSockets}
 FROST benötigt WebSockets am Backend, um in Echtzeit Updates an die Clients
-verteilen zu können. Das verwendete Haskell Framework ``Yesod'' (TODO: Insert link)
-erlaubt es auf einfache Art und Weise WebSockets und normale HTTP Endpunkte zu
-mischen. 
+verteilen zu können. Das verwendete Haskell Framework
+``Yesod''\footnote{\url{http://www.yesodweb.com/}} erlaubt es auf einfache Art
+und Weise WebSockets und normale HTTP Endpunkte zu mischen.
 
 \subsection*{Concurrency}
-WebSockets müssen im Gegensatz zu klassischen HTTP Requests offen
-gehalten werden und erfordern, dass der Server einen Listener für jeden
-WebSocket abstellt. 
-Dies ist eines der wichtigsten Kriterien für Haskell. Der Multithreading Support
-von Haskell ist anderen Sprachen weit voraus. Werkzeuge wie Software
-Transactional Memory (TODO: add Link) werden in FROST ausgiebig genutzt und
-erlauben es dem Server viele Clients gleichzeitig und trotzdem performant zu
-bedienen. Durch die Tools die Haskell hier zur Verfügung stellt kann
-FROST auf einem kleinen Server (Single Core, 512MB Ram) laufen und dennoch über
-100 Clients gleichzeitig bedienen.
+WebSockets müssen im Gegensatz zu klassischen HTTP Requests offen gehalten
+werden und erfordern, dass der Server einen Listener für jeden WebSocket
+abstellt. Dies ist eines der wichtigsten Kriterien für Haskell. Der
+Multithreading Support von Haskell ist anderen Sprachen weit voraus. Werkzeuge
+wie Software Transactional
+Memory\footnote{\url{https://wiki.haskell.org/Software_transactional_memory}}
+werden in FROST ausgiebig genutzt und erlauben es dem Server viele Clients
+gleichzeitig und trotzdem performant zu bedienen. Durch die Tools die Haskell
+hier zur Verfügung stellt kann FROST auf einem kleinen Server (Single Core,
+512MB Ram) laufen und dennoch über 100 Clients gleichzeitig bedienen.
 
 \subsection*{Hohe Ähnlichkeit zu PureScript}
 Haskell's Syntax ist der von PureScript sehr ähnlich. Auch semantisch liegen
@@ -60,6 +60,15 @@ sich die Sprachen sehr nahe, was es erleichtert zwischen Frontend und Backend
 hin und her zu wechseln ohne viel Zeit für den Kontextwechsel zu verlieren.
 
 \subsection*{Guter Support für ``State Machine'' artige Anwendungen}
+Da in Haskell alle Variablen/Werte unveränderlich sind, ist es eine übliche
+Praxis das Fortschreiten eines Zustandes als eine Folge von Zuständen zu
+modellieren, die jedoch alle unabhängig voneinander sind. Haskell's
+Datenstrukturen sind darauf ausgelegt diesen Use-Case effizient zu unterstützen.
+Eine State Machine lässt sich somit effizient und mit hervorragendem Compiler
+Support umsetzen.
+
+Diese Eigenschaft macht Haskell zu einer guten Wahl für Applikationen die sich
+Event Sourcing zu Nutze machen.
 
 \section{Event Sourcing}
 Event Sourcing ist eine Art den Zustand in einer Applikation zu verwalten und

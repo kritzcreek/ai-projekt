@@ -24,3 +24,8 @@
 *.pdf
 /auto/
 /_region_.tex
+/ai-projekt.fdb_latexmk
+*.fls
+/*.fdb_latexmk
+*.fdb_latexmk
+/tex/auto/fazit.el
