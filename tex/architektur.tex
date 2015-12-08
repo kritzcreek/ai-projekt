@@ -70,6 +70,7 @@ Support umsetzen.
 Diese Eigenschaft macht Haskell zu einer guten Wahl für Applikationen die sich
 Event Sourcing zu Nutze machen.
 
+\clearpage
 \section{Event Sourcing}
 Event Sourcing ist eine Art den Zustand in einer Applikation zu verwalten und
 speichern, bei der man nicht den Zustand selbst speichert, sondern die
@@ -107,6 +108,7 @@ Der aktuelle Applikationszustand wird in einer Statemachine festgehalten. Diese
 akzeptiert eine Menge von Aktionen oder Events, und verwendet eine Funktion der
 Form \texttt{Aktion -> Applikationszustand -> Applikationszustand} um den
 Applikationszustand fortzuschreiten. In FROST sieht diese Methode wie folgt aus:
+\begin{figure}
 \begin{lstlisting}
 evalAction :: Action -> AppState -> AppState
 evalAction (AddTopic t) as      = addTopic t as
@@ -123,6 +125,8 @@ evalAction (ReplayActions actions) _ = generateState actions
 evalAction (ShowError e) as     = as
 evalAction NOP as               = as
 \end{lstlisting}
+\caption{evalAction}
+\end{figure}
 
 Auf der linken Seite des Gleichheitszeichens wird Pattern Matchen gegen die
 Actions eingesetzt. Auf diese Weise werden die notwendigen Informationen um den
